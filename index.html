@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nametag Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="wrap">
+  <h1 class="page-title">Nametag Generator</h1>
+  <p class="page-sub">Quickly generate custom WCA competition nametags using Google Slides.</p>
+
+  <ul class="bullets-compact">
+    <li>Fully customizable Google Slides template.</li>
+    <li>No software installation required.</li>
+    <li>Pre-formatted CSV generator with many quality of life features.</li>
+    <li>Supports single sided or double sided nametags.</li>
+  </ul>
+
+  <div class="callout">
+    <b>Printing formats supported</b>
+    <div class="format-group">
+      <b>3x3 grid (NorCal)</b>
+      <ul>
+        <li>The generated PDF is the same size as your provided PDF, with each nametag sized down to fit in a 3x3 grid</li>
+        <li>Fits 3x4 in nametag sleeves when your provided PDF is sized to letter paper.</li>
+      </ul>
+    </div>
+    <div class="format-group">
+      <b>2x4 grid (SoCal)</b>
+      <ul>
+        <li>The generated PDF is letter size, with the nametags arranged at the center of the page leaving a border around them.</li>
+        <li>Fits 2.25x3.5 in nametag sleeves when your provided PDF pages are sized to 2.3x3.5 in.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout disclaimer">
+    This tool is built to match the workflow used by West Coast Cubing organizers. If any features are missing, reach out to <a href="mailto:hhafeez@worldcubeassociation.org">Hamza Hafeez</a>.
+    <br><b>Disclaimer:</b> this tool was built largely with AI-generated code, so please sanity-check the output.
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="guide" onclick="showTab('guide')">Guide</button>
+    <button class="tab-btn" data-tab="csv" onclick="showTab('csv')">CSV Generator</button>
+    <button class="tab-btn" data-tab="pdf" onclick="showTab('pdf')">PDF Generator</button>
+  </div>
+
+
+<div class="tab-panel active" id="tab-guide">
+  <h2 class="section">Steps</h2>
+  <ol class="steps">
+    <li>
+      <div class="step-detail">
+        Go to the <button class="jumpbtn" onclick="showTab('csv')">CSV Generator</button> tab and download the CSV.
+      </div>
+    </li>
+    <li>
+      <div class="step-detail">Create a Google Drive folder, upload the CSV there, and open it as a Google Sheet.</div>
+    </li>
+    <li>
+      <div class="step-detail">
+        Copy a design template from <a href="https://drive.google.com/drive/folders/1-3XSA8F8_W7aZbYKXZ0--DzGr2ZdO94j" target="_blank" rel="noopener">this template folder</a> and paste it into your folder.
+      </div>
+    </li>
+    <li>
+      <div class="step-detail">Edit the template freely in Slides. To add a CSV field, add <code>{{fieldname}}</code> matching a column header from the spreadsheet. You may change the page dimensions but the defaults are already set to whats described above. Keep both slides for a double sided tag, or keep only one slide for a single sided tag.</div>
+    </li>
+    <li>
+      <div class="step-detail">
+        In your copied Slides file, open the Nametag Generator menu in the top bar and click <b>Run Merge</b> (refresh if not visible). Reload your page if you can't see it. It will ask for some details and then create a new slideshow for your nametags in around 30 seconds. Open the slideshow in a new tab.
+      </div>
+      <div class="step-note">
+        You'll see a "Google hasn't verified this app" warning. Click Advanced, then Go to nametag_generator (unsafe). This is a small standalone script with no external dependencies. It only reads the data sheet and edits the copy of the slide it creates, and does not touch anything else in your Drive.
+      </div>
+    </li>
+    <li>
+      <div class="step-detail">Double check all the nametags look okay. You may need to do manual adjustments (changing font size). You can also change the design for delegates or organizers.</div>
+    </li>
+    <li>
+      <div class="step-detail">In the File menu, choose Download, then PDF Document.</div>
+    </li>
+    <li>
+      <div class="step-detail">
+        Go to the <button class="jumpbtn" onclick="showTab('pdf')">PDF Generator</button> tab and download the generated PDF.
+      </div>
+    </li>
+  </ol>
+</div>
+
+
+<div class="tab-panel" id="tab-csv">
+  <div class="callout">
+    <b>CSV Specifications</b>
+    <ul>
+      <li>Orders competitors alphabetically, split into returners and newcomers.</li>
+      <li>Splits the name into first name, last name, and localized name for flexibility in design.</li>
+      <li>WCA ID shows <b>Newcomer</b> for first time competitors.</li>
+      <li>Adds a stage letter prefix to group numbers when the competition has more than one stage.</li>
+      <li>Also generates rows for delegates and organizers with no listed tasks.</li>
+    </ul>
+  </div>
+  <p class="note">Enter a competition ID and click <b>Generate</b></p>
+
+  <div class="field-row">
+    <input type="text" id="csv-compId" placeholder="e.g. DuperSuperDavisSpring2026" autocomplete="off">
+    <button id="csv-fetchBtn">Generate</button>
+  </div>
+  <span class="toggle-paste" id="csv-pasteToggle">or paste WCIF JSON instead</span>
+  <div class="paste-area" id="csv-pasteArea">
+    <textarea id="csv-pasteJson" placeholder="Paste the full WCIF JSON here"></textarea><br>
+    <button id="csv-pasteBtn">Convert pasted JSON</button>
+  </div>
+
+  <div class="status" id="csv-status"></div>
+
+  <div class="meta" id="csv-meta" style="display:none;"></div>
+
+  <div class="actions">
+    <a class="download-btn" id="csv-downloadBtn" download="competitors.csv" disabled>Download CSV</a>
+  </div>
+</div>
+
+
+<div class="tab-panel" id="tab-pdf">
+  <div id="pdf-drop">
+    <p><strong>Drop a PDF here</strong> or click to choose a file</p>
+  </div>
+  <input type="file" id="pdf-fileInput" accept="application/pdf">
+
+  <div id="pdf-fileInfo">
+    <span id="pdf-fileName"></span>
+    <button id="pdf-clearFile">remove</button>
+  </div>
+
+  <div class="sided-group" role="group" aria-label="Sides">
+    <button type="button" class="sided-btn" id="pdf-singleSided">Single sided</button>
+    <button type="button" class="sided-btn active" id="pdf-doubleSided">Double sided</button>
+  </div>
+
+  <div class="sided-group" role="group" aria-label="Grid layout">
+    <button type="button" class="sided-btn active" id="pdf-grid3x3">3x3</button>
+    <button type="button" class="sided-btn" id="pdf-grid2x4">2x4</button>
+  </div>
+
+  <button id="pdf-go" disabled>Generate grid PDF</button>
+
+  <div id="pdf-status"></div>
+
+
+</div>
+
+</div>
+
+<script src="js/tabs.js"></script>
+<script src="js/csv-generator.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="js/pdf-grid.js"></script>
+</body>
+</html>

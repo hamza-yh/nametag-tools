@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"C:/Users/findh/windows/Downloads/nametag-tools/css\" \"C:/Users/findh/windows/Downloads/nametag-tools/js\")",
+      "Bash(chromium-cli --help)",
+      "Bash(npm ls *)",
+      "Read(//c/Users/findh/AppData/Roaming/npm/node_modules/**)",
+      "Bash(node --check \"C:/Users/findh/windows/Downloads/nametag-tools/js/pdf-grid.js\")",
+      "Bash(node --check \"C:/Users/findh/windows/Downloads/nametag-tools/js/csv-generator.js\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\findh\\windows\\Downloads\\nametag-tools"
+    ]
+  }
+}

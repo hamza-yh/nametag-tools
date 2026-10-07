@@ -30,9 +30,9 @@ function wcifToCsv(wcif) {
     }
   }
 
-  // Room letter is only included when there are more than 2 rooms
+  // Room letter is only included when there are 2 or more rooms
   // in the whole WCIF (per spec).
-  const useRoomLetter = totalRoomCount > 2;
+  const useRoomLetter = totalRoomCount >= 2;
   function roomLetter(roomId) {
     const name = roomNameById.get(roomId) || '';
     return name.charAt(0).toUpperCase();
@@ -222,7 +222,7 @@ function renderResult(wcif, csv, sourceLabel) {
     <div><b>Persons in WCIF</b><br>${(wcif.persons || []).length}</div>
     <div><b>Rows in CSV</b><br>${rowCount}</div>
     <div><b>Events</b><br>${eventCount}</div>
-    <div><b>Rooms</b><br>${roomCount} (room letter ${roomCount > 2 ? 'ON' : 'off'})</div>
+    <div><b>Rooms</b><br>${roomCount} (room letter ${roomCount >= 2 ? 'ON' : 'off'})</div>
   `;
 
   // Prepend a UTF-8 BOM. Without it, Excel (esp. on Windows) guesses the
